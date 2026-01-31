@@ -1,0 +1,24 @@
+project:
+  name: legal-rag
+  environment: dev
+
+paths:
+  embeddings: data/embeddings/eurlex_embeddings.npy
+  metadata: data/embeddings/eurlex_metadata.json
+  faiss_index: indexes/faiss/eurlex_faiss.index
+
+models:
+  embedding_model: sentence-transformers/all-MiniLM-L6-v2
+  generator_model: facebook/bart-base
+
+retrieval:
+  top_k_default: 5
+  top_k_max: 10
+
+generation:
+  max_input_tokens: 1024
+  max_new_tokens: 150
+  do_sample: false
+
+system:
+  device: auto
