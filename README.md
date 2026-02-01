@@ -26,18 +26,18 @@
 - Includes a clear roadmap for improving retrieval quality (hybrid search, reranking) and generation quality (fine-tuning, larger LLMs)
 
 ---
-
 ## 📋 Table of Contents
 
 - [Overview](#-overview)
-- [Features](#-features)
-- [Architecture](#-architecture)
+- [Features](#️-features)
+- [Architecture](#️-architecture)
 - [Quick Start](#-quick-start)
-- [Project Structure](#-project-structure)
 - [Evaluation Results](#-evaluation-results)
-- [Design Tradeoffs](#-design-tradeoffs)
+- [Design Tradeoffs](#️-design-tradeoffs)
 - [Future Work](#-future-work)
+- [References](#-references)
 - [Author](#-author)
+
 
 ---
 
