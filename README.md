@@ -18,7 +18,7 @@
 
 ## 🔎 TL;DR -
 - Built an end-to-end Legal RAG system over EUR-Lex documents with an offline data pipeline and an online FastAPI inference service
-- Processed 57K+ EU legal documents into 19,412 overlapping chunks, embedded using Sentence-Transformers and indexed with FAISS (IndexFlatIP)
+- Processed 57K+ EU legal documents into ~19k overlapping chunks, embedded using Sentence-Transformers and indexed with FAISS (IndexFlatIP)
 - Implemented a complete retrieval evaluation framework (Recall@K, Precision@K, MRR), latency benchmarking, failure analysis, and prompt A/B testing
 - Current evaluation is an early validation run on a small query set, intended to verify pipeline correctness rather than benchmark final retrieval quality
 - Designed for production readiness: stateless API, Docker deployment, structured logging, API key security, and config-driven startup
@@ -44,7 +44,7 @@
 
 This project implements an end-to-end Legal RAG pipeline for semantic search and question answering over EUR-Lex legal documents from the [LexGLUE (EUR-Lex)](https://huggingface.co/datasets/coastalcph/multi_eurlex) dataset.
 
-**System Philosophy:** Production-focused ML system with evaluation-first design, reproducibility, scalability, and observability. Not a demo.
+**System Philosophy:** Production-focused ML system with evaluation-aware design, reproducibility, scalability, and observability. Not a demo.
 
 **Pipeline:**
 ```
@@ -62,7 +62,7 @@ EUR-Lex Data → Cleaning → Chunking → Embeddings → FAISS Index → FastAP
 | Feature | Implementation | Details |
 |---------|---------------|---------|
 | **Semantic Search** | Sentence-Transformers | `all-MiniLM-L6-v2` embeddings (384-dim) |
-| **Fast Retrieval** | FAISS IndexFlatIP | ~Sub-50ms search over 19K+ chunks (hardware-dependent)|
+| **Fast Retrieval** | FAISS IndexFlatIP | ~30–50ms search over ~19k chunks (CPU, single query)|
 | **Answer Generation** | BART | `facebook/bart-base` for generation |
 | **Chunking Strategy** | Overlapping chunks | 500 chars, 100 char overlap |
 | **Retrieval Metrics** | Comprehensive evaluation | Recall@K, Precision@K, MRR |
@@ -71,7 +71,7 @@ EUR-Lex Data → Cleaning → Chunking → Embeddings → FAISS Index → FastAP
 | **Observability** | Structured logging | JSON logs, latency metrics, request tracing |
 
 **Dataset Statistics:**
-- Total Documents: 57,000+ EU legal texts
+- ~57,000 EU legal documents (EUR-Lex)
 - Total Chunks: 19,412 searchable passages
 - Avg Chunk Size: ~450 characters
 - Domain: EU regulations, directives, decisions
@@ -82,6 +82,7 @@ EUR-Lex Data → Cleaning → Chunking → Embeddings → FAISS Index → FastAP
 - FAISS index (~30MB)
 - Evaluation results
   
+Artifacts are versioned and pinned by commit hash for reproducibility  
 NOTE: These artifacts are intentionally excluded from GitHub and required for full reproducibility.
 
 ---
@@ -99,7 +100,7 @@ graph TB
     G[User Question] -->|FastAPI| H[Query Embedding]
     H -->|Search| F
     F -->|Top-K| I[Retrieved Context]
-    I -->|Optional BART generation| J[Answer]
+    I -->|Optional BART-based generation extractive-leaning| J[Answer]
     
     style F fill:#e1f5ff
     style I fill:#fff4e1
@@ -141,7 +142,7 @@ def chunk_text(text, chunk_size=500, overlap=100):
 
 **5. FAISS Indexing**
 - Index type: `IndexFlatIP` (Inner Product for cosine similarity)
-- Index is loaded into memory at API startup for fast query-time retrieval.
+- Index loaded into memory at API startup (cold-start cost paid once.
 - Add all embeddings to index
 - Save to disk for fast loading
 
@@ -157,8 +158,7 @@ def chunk_text(text, chunk_size=500, overlap=100):
 - Structured JSON logging
 - Latency profiling middleware
 - Config-driven startup (paths, model, index)
-
-
+- Top-k capped at 10 to prevent abuse
 
 **Answer Generation:**
 - Model: `facebook/bart-base`
@@ -185,6 +185,7 @@ Python 3.12 (recommended)
 CUDA GPU (optional, recommended)
 8GB+ RAM
 ```
+Note: Large artifacts are downloaded separately from Hugging Face Hub.
 
 ### Installation
 
@@ -261,7 +262,7 @@ legal-RAG-eurlex/
 
 ## 📊 Evaluation Results
 
-Note: These results correspond to an early validation run on a reduced EUR-Lex subset.
+Note: These results correspond to an early validation run on a reduced EUR-Lex subset.These metrics are based on a toy evaluation set and are not statistically significant.
 
 ### Retrieval Performance (Current Run)
 
@@ -281,7 +282,7 @@ to validate pipeline correctness rather than benchmark final retrieval quality.
 - Total end-to-end latency: ~8.5 seconds
 
 Note: Latency measured on a single-request, end-to-end API run.
-Performance is hardware-, batch-size and configuration-dependent.
+Performance is hardware-, batch-size- and configuration-dependent.
 
 |
 
@@ -307,7 +308,9 @@ mrr = 1 / rank_of_first_relevant_doc
 <summary><b>Failure Analysis</b></summary>
 
 - Total failures detected: 2
-- Failure type: Retrieval miss
+- Failure type:
+  1. Retrieval miss
+  2. Chunk Bouondary Fragmentation
 
 Observed patterns:
 - Relevant legal articles present but not ranked in top-K
@@ -369,6 +372,7 @@ Results saved in `results/prompt_comparison.json`.
 - **Decision:** Use pretrained models without fine-tuning
 - **Rationale:** Faster development, no labeled data needed, good baseline performance
 - **Tradeoff:** Suboptimal for legal domain, misses domain-specific patterns (future work)
+- Chosen to keep infrastructure simple and reproducible
 
 ---
 
