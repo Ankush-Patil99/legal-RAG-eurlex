@@ -12,13 +12,11 @@
 
 *Built with Sentence-Transformers, FAISS, and BART for accurate legal question answering*
 
-[TL;DR](#-tldr-for-recruiters) • [Features](#-features) • [Quick Start](#-quick-start) • [Architecture](#-architecture) • [Results](#-evaluation-results)
-
 </div>
 
 ---
 
-## 🔎 TL;DR (For Recruiters)
+## 🔎 
 
 - Built end-to-end production RAG system: data pipeline → embeddings → FAISS indexing → FastAPI inference
 - Processed 57,000+ EUR-Lex legal documents into 19,412 searchable chunks with overlap strategy
