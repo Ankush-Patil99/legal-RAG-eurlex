@@ -8,6 +8,7 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Status](https://img.shields.io/badge/Status-Production-success.svg)
 
+
 **A production-grade Retrieval-Augmented Generation (RAG) system over EUR-Lex legal documents**
 
 *Built with Sentence-Transformers, FAISS, and BART for accurate legal question answering*
