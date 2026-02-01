@@ -17,13 +17,12 @@
 ---
 
 ## 🔎 TL;DR -
-
-- Built end-to-end production RAG system: data pipeline → embeddings → FAISS indexing → FastAPI inference
-- Processed 57,000+ EUR-Lex legal documents into 19,412 searchable chunks with overlap strategy
-- Achieved 91% Recall@10, 76% Precision@5, 0.79 MRR on legal question answering evaluation
-- Sub-50ms FAISS retrieval latency over 19K vectors; <300ms end-to-end API response time
-- Implemented systematic evaluation framework: retrieval metrics, failure analysis, prompt A/B testing
-- Production-ready: stateless API design, Docker deployment, structured logging, latency profiling
+- Built an end-to-end Legal RAG system over EUR-Lex documents with an offline data pipeline and an online FastAPI inference service
+- Processed 57K+ EU legal documents into 19,412 overlapping chunks, embedded using Sentence-Transformers and indexed with FAISS (IndexFlatIP)
+- Implemented a complete retrieval evaluation framework (Recall@K, Precision@K, MRR), latency benchmarking, failure analysis, and prompt A/B testing
+- Current evaluation is an early validation run on a small query set, intended to verify pipeline correctness rather than benchmark final retrieval quality
+- Designed for production readiness: stateless API, Docker deployment, structured logging, API key security, and config-driven startup
+- Includes a clear roadmap for improving retrieval quality (hybrid search, reranking) and generation quality (fine-tuning, larger LLMs)
 
 ---
 
