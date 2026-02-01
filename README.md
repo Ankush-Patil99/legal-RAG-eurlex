@@ -262,6 +262,8 @@ legal-RAG-eurlex/
 
 ## 📊 Evaluation Results
 
+Note: These results correspond to an early validation run on a reduced EUR-Lex subset.
+
 ### Retrieval Performance (Current Run)
 
 - Number of evaluation questions: 3
@@ -280,12 +282,14 @@ to validate pipeline correctness rather than benchmark final retrieval quality.
 - Total end-to-end latency: ~8.5 seconds
 
 Note: Latency measured on a single-request, end-to-end API run.
-Performance is hardware- and configuration-dependent.
+Performance is hardware-, batch-size and configuration-dependent.
+
 |
 
 ### Metric Definitions
 
-**Recall@K:** Proportion of relevant documents retrieved in top-K results
+**Recall@K:** Proportion of ground-truth relevant documents retrieved in top-K results
+
 ```python
 recall = len(relevant_docs_in_topK) / len(total_relevant_docs)
 ```
@@ -339,7 +343,7 @@ Results saved in `results/prompt_comparison.json`.
 
 **1. FAISS over Elasticsearch**
 - **Decision:** Use FAISS IndexFlatIP
-- **Rationale:** Lower latency (<50ms vs 100-200ms), simpler deployment, optimized for dense vectors
+- **Rationale:** Lower query-time latency and simpler deployment compared to Elasticsearch, simpler deployment, optimized for dense vectors
 - **Tradeoff:** No full-text search hybrid, less flexible filtering
 
 **2. Precomputed Embeddings**
@@ -349,12 +353,12 @@ Results saved in `results/prompt_comparison.json`.
 
 **3. Character-Based Chunking (500 chars, 100 overlap)**
 - **Decision:** Fixed-size character chunks with overlap
-- **Rationale:** Preserves sentence boundaries, consistent sizes, prevents information loss
+- **Rationale:** Preserves local context via overlap, consistent sizes, prevents information loss
 - **Tradeoff:** May split mid-sentence occasionally, not semantically aware
 
 **4. BART for Generation**
 - **Decision:** Use `facebook/bart-base` instead of large LLMs
-- **Rationale:** Fast inference (<300ms), runs on consumer GPUs, sufficient for factual QA
+- **Rationale:** Simpler and more controllable than large LLMs, suitable for factual QA, runs on consumer GPUs, sufficient for factual QA
 - **Tradeoff:** Less sophisticated than GPT-4, limited reasoning capability
 
 **5. Stateless API Design**
@@ -372,15 +376,15 @@ Results saved in `results/prompt_comparison.json`.
 ## 🚧 Future Work
 
 **Phase 1: Enhanced Retrieval**
+- Metadata filtering (document type, date, jurisdiction)
 - Hybrid search (dense + sparse BM25)
 - Cross-encoder reranking (ms-marco-MiniLM)
 - Query expansion with legal synonyms
-- Metadata filtering (document type, date, jurisdiction)
 
 **Phase 2: Better Generation**
 - Fine-tune BART on legal QA dataset
 - Upgrade to larger LLM (Llama 2, Mistral)
-- Chain-of-thought prompting for complex queries
+- Structured reasoning prompts for complex queries (without exposing chain-of-thought)
 - Citation extraction from source chunks
 
 **Phase 3: Production Readiness**
@@ -388,9 +392,11 @@ Results saved in `results/prompt_comparison.json`.
 - Prometheus + Grafana observability
 - CI/CD pipeline (GitHub Actions)
 - Automated testing (unit + integration)
+- Configurable resource limits and timeouts
+
 
 **Phase 4: Advanced Features**
-- Multi-turn conversations with context window
+- Optional multi-turn conversations with bounded context window
 - Feedback loop for continuous improvement
 - Active learning to identify hard queries
 - Multilingual support (other EU languages)
@@ -404,33 +410,12 @@ Results saved in `results/prompt_comparison.json`.
 
 **Models:**
 - [Sentence-Transformers Documentation](https://www.sbert.net/)
-- [BART Paper (Lewis et al., 2019)](https://arxiv.org/abs/1910.13461)
 - [all-MiniLM-L6-v2 Model Card](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
 
 **Tools:**
 - [FAISS Documentation](https://github.com/facebookresearch/faiss/wiki)
 - [HuggingFace Transformers](https://huggingface.co/docs/transformers/)
 
-**Related Papers:**
-- [Dense Passage Retrieval (Karpukhin et al., 2020)](https://arxiv.org/abs/2004.04906)
-- [RAG: Retrieval-Augmented Generation (Lewis et al., 2020)](https://arxiv.org/abs/2005.11401)
-
----
-
-## 🤝 Contributing
-
-Contributions welcome! Fork the repository, create a feature branch, and submit a Pull Request.
-
-```bash
-# Install dev dependencies
-pip install -r requirements-dev.txt
-
-# Run tests
-pytest tests/
-
-# Format code
-black . && isort .
-```
 
 ---
 
@@ -441,20 +426,6 @@ black . && isort .
 - LinkedIn: [Ankush Patil](https://www.linkedin.com/in/ankush-patil-48989739a)
 - Gmail: [Email me](https://mail.google.com/mail/?view=cm&fs=1&to=ankpatil1203@gmail.com)
 - Website: [ankush-patil99.github.io](https://ankush-patil99.github.io/)
-
----
-
-## 📝 Citation
-
-```bibtex
-@misc{legal-rag-eurlex,
-  author = {Ankush Patil},
-  title = {legal-RAG-eurlex: Production-Grade Legal RAG System},
-  year = {2024},
-  publisher = {GitHub},
-  url = {https://github.com/Ankush-Patil99/legal-RAG-eurlex}
-}
-```
 
 ---
 
