@@ -1,0 +1,9 @@
+[
+  {
+    "request_id": "323a230f-09bd-4d36-8dde-5d0997b0a2b1",
+    "embedding_ms": 250.0067999996245,
+    "retrieval_ms": 693.5451000016183,
+    "generation_ms": 7604.019300000742,
+    "total_ms": 8547.833299998194
+  }
+]

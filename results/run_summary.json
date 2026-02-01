@@ -1,0 +1,14 @@
+{
+  "dataset": "lex_glue / eurlex",
+  "num_documents": 65000,
+  "num_chunks": 1254146,
+  "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "generator_model": "facebook/bart-base",
+  "vector_index": "FAISS IndexFlatIP",
+  "evaluation_questions": [
+    "What is an excessive deficit under EU law?",
+    "Which institution decides whether an excessive deficit exists?",
+    "What happens after an excessive deficit is corrected?",
+    "What legal framework governs the excessive deficit procedure?"
+  ]
+}

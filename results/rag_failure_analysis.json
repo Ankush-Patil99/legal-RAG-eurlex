@@ -1,0 +1,29 @@
+{
+  "num_failures": 2,
+  "failures": [
+    {
+      "question": "What treaty article governs excessive deficit decisions?",
+      "answer_phrase": "Article 126",
+      "retrieved_chunks": [
+        "anuary 1994; whereas Article 109e(4) of the Treaty lays down that, in the second stage, Member States shall endeavour to avoid excessive government deficits; Whereas there is an excessive deficit procedure which provides for a decision on the existence of an excessive deficit and, after the excessive deficit has been corrected, for the abrogation of that decision; whereas, during the second stage, the excessive deficit procedure is determined by Article 104c of the Treaty, excluding paragraphs 1",
+        "anuary 1994; whereas Article 109e(4) of the Treaty lays down that, in the second stage, Member States shall endeavour to avoid excessive government deficits; Whereas there is an excessive deficit procedure which provides for a decision on the existence of an excessive deficit and, after the excessive deficit has been corrected, for the abrogation of that decision; whereas, during the second stage, the excessive deficit procedure is determined by Article 104c of the Treaty, excluding paragraphs 1",
+        " January 1994; whereas Article 109e(4) of the Treaty lays down that, in the second stage, Member States shall endeavour to avoid excessive government deficits; Whereas there is an excessive deficit procedure which provides for a decision on the existence of an excessive deficit and, after the excessive deficit has been corrected, for the abrogation of that decision; whereas, during the second stage, the excessive deficit procedure is determined by Article 104c of the Treaty, excluding paragraphs",
+        "January 1994; whereas Article 109e(4) of the Treaty lays down that, in the second stage, Member States shall endeavour to avoid excessive government deficits; Whereas there is an excessive deficit procedure which provides for a decision on the existence of an excessive deficit and, after the excessive deficit has been corrected, for the abrogation of that decision; whereas, during the second stage, the excessive deficit procedure is determined by Article 104c of the Treaty, excluding paragraphs ",
+        " January 1994; whereas Article 109e(4) of the Treaty lays down that, in the second stage, Member States shall endeavour to avoid excessive government deficits; Whereas there is an excessive deficit procedure which provides for a decision on the existence of an excessive deficit and, after the excessive deficit has been corrected, for the abrogation of that decision; whereas, during the second stage, the excessive deficit procedure is determined by Article 104c of the Treaty, excluding paragraphs"
+      ],
+      "failure_type": "retrieval_miss"
+    },
+    {
+      "question": "Which body decides on the existence of an excessive deficit?",
+      "answer_phrase": "Council decided",
+      "retrieved_chunks": [
+        "tence of an excessive deficit in accordance with Article 104(6) if the double condition - that the deficit remains close to the reference value and that its excess over the reference value is temporary - is fully met. This double condition is not met in the case of the United Kingdom. Therefore, other relevant factors are not taken into account in this decision, HAS ADOPTED THIS DECISION: Article 1 From an overall assessment it follows that an excessive deficit exists in the United Kingdom. Arti",
+        " January 1994; whereas Article 109e (4) lays down that, during the second stage, Member States are to endeavour to avoid excessive government deficits; Whereas there is an excessive deficit procedure which provides for a decision on the existence of an excessive deficit and, after the excessive deficit has been corrected, for the abrogation of that decision; whereas during the second stage, the excessive deficit procedure is determined by Article 104c excluding paragraphs 1, 9 and 11; whereas th",
+        "1 From an overall assessment it follows that an excessive deficit exists in the United Kingdom. Article 2 This Decision is addressed to the United Kingdom of Great Britain and Northern Ireland. Done at Brussels, 24 January 2006.",
+        "et. In the case of France, this double condition is not met. Therefore, relevant factors are not taken into account in the steps leading to this Decision, HAS ADOPTED THIS DECISION: Article 1 From an overall assessment it follows that an excessive deficit exists in France. Article 2 This Decision is addressed to the French Republic. Done at Luxembourg, 27 April 2009.",
+        "not fulfil the requirements under one or both criteria, it is necessary for the Commission to take into account all relevant factors. The Commission has to examine whether there is a risk of an excessive deficit in a Member State, HAS ADOPTED THIS REGULATION: CHAPTER I DEFINITIONS Article 1 1. For the purposes of the Protocol on the excessive deficit procedure and of this Regulation, the terms given in paragraphs 2 to 6 are defined according to the European system of national and regional accoun"
+      ],
+      "failure_type": "retrieval_miss"
+    }
+  ]
+}
