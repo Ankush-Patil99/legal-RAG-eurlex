@@ -16,7 +16,7 @@
 
 ---
 
-## 🔎 
+## 🔎 TL;DR -
 
 - Built end-to-end production RAG system: data pipeline → embeddings → FAISS indexing → FastAPI inference
 - Processed 57,000+ EUR-Lex legal documents into 19,412 searchable chunks with overlap strategy
@@ -43,7 +43,7 @@
 
 ## 🚀 Overview
 
-This project implements an end-to-end Legal RAG pipeline for semantic search and question answering over EUR-Lex legal documents from the [lex_glue](https://huggingface.co/datasets/lex_glue) dataset.
+This project implements an end-to-end Legal RAG pipeline for semantic search and question answering over EUR-Lex legal documents from the [lex_glue](https://huggingface.co/datasets/coastalcph/multi_eurlex) dataset.
 
 **System Philosophy:** Production-focused ML system emphasizing reproducibility, evaluation-first design, scalability, and observability. Not a demo.
 
@@ -400,7 +400,6 @@ Results saved to `results/prompt_comparison.json` (external artifact).
 
 **Datasets:**
 - [lex_glue: EUR-Lex Dataset](https://huggingface.co/datasets/lex_glue)
-- [EUR-Lex Official Portal](https://eur-lex.europa.eu/)
 
 **Models:**
 - [Sentence-Transformers Documentation](https://www.sbert.net/)
@@ -434,12 +433,6 @@ black . && isort .
 
 ---
 
-## 📄 License
-
-This project is licensed under the MIT License.
-
----
-
 ## 👤 Author
 
 **Ankush Patil**
@@ -447,12 +440,6 @@ This project is licensed under the MIT License.
 - LinkedIn: [Ankush Patil](https://www.linkedin.com/in/ankush-patil-48989739a)
 - Gmail: [Email me](https://mail.google.com/mail/?view=cm&fs=1&to=ankpatil1203@gmail.com)
 - Website: [ankush-patil99.github.io](https://ankush-patil99.github.io/)
-
----
-
-## 🙏 Acknowledgments
-
-HuggingFace for `lex_glue` dataset and model hosting • Facebook AI for FAISS and BART • Sentence-Transformers team • EUR-Lex for open access to EU legal documents
 
 ---
 
@@ -473,7 +460,5 @@ HuggingFace for `lex_glue` dataset and model hosting • Facebook AI for FAISS a
 <div align="center">
 
 ⭐ **If you found this project helpful, please consider giving it a star!**
-
-Built with ❤️ for the legal AI community
 
 </div>
