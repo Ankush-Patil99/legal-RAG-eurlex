@@ -241,7 +241,7 @@ curl -X POST "http://localhost:8000/search" \
 Large artifacts required to fully reproduce this project are hosted on the Hugging Face Hub and intentionally excluded from this GitHub repository.
 
 **Hugging Face Dataset Repository:**
-👉 https://huggingface.co/datasets/ankpatil1203/legal-rag-eurlex-artifacts
+👉 [https://huggingface.co/datasets/ankpatil1203/legal-rag-eurlex-artifacts](https://huggingface.co/ankpatil1203/legal-rag-eurlex-artifacts/tree/main)
 
 ### Contents
 
