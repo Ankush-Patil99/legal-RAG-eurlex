@@ -43,13 +43,13 @@
 
 ## 🚀 Overview
 
-This project implements an end-to-end Legal RAG pipeline for semantic search and question answering over EUR-Lex legal documents from the [lex_glue](https://huggingface.co/datasets/coastalcph/multi_eurlex) dataset.
+This project implements an end-to-end Legal RAG pipeline for semantic search and question answering over EUR-Lex legal documents from the [LexGLUE (EUR-Lex)](https://huggingface.co/datasets/coastalcph/multi_eurlex) dataset.
 
-**System Philosophy:** Production-focused ML system emphasizing reproducibility, evaluation-first design, scalability, and observability. Not a demo.
+**System Philosophy:** Production-focused ML system with evaluation-first design, reproducibility, scalability, and observability. Not a demo.
 
 **Pipeline:**
 ```
-EUR-Lex Data → Cleaning → Chunking → Embeddings → FAISS Index → FastAPI Retrieval → BART Generation
+EUR-Lex Data → Cleaning → Chunking → Embeddings → FAISS Index → FastAPI Retrieval (→ Optional BART Generation)
 ```
 
 **Scope:**
