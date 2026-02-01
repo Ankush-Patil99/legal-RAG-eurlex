@@ -78,7 +78,7 @@ EUR-Lex Data → Cleaning → Chunking → Embeddings → FAISS Index → FastAP
 
 **External Artifacts (Hosted on Hugging Face Hub):**
 - Raw dataset (57K+ documents)
-- Precomputed embeddings (19K × 384 vectors, ~30MB)
+- Precomputed embeddings (19K × 384 vectors, ~6.2gb)
 - FAISS index (~30MB)
 - Evaluation results
   
@@ -199,8 +199,13 @@ cd legal-RAG-eurlex
   source venv/bin/activate  # Windows: venv\Scripts\activate
 - pip install -r requirements.txt
 
-# Download artifacts from Hugging Face Hub
-python scripts/download_artifacts.py  # downloads data, embeddings, FAISS index from HF Hub
+# Download large artifacts from Hugging Face Hub
+python scripts/download_artifacts.py \
+  --repo ankpatil1203/legal-rag-eurlex-artifacts \
+  --output_dir artifacts/
+
+This will download `raw/`, `processed/`, `embeddings/`, and `faiss/` into a local `artifacts/` directory.
+
 ```
 
 ### Run FastAPI Server
@@ -228,33 +233,29 @@ curl -X POST "http://localhost:8000/search" \
 ```
 
 ---
+---
 
-## 📁 Project Structure
+## 📦 External Artifacts (Hugging Face Hub)
 
-```
-legal-RAG-eurlex/
-├── api/                          # FastAPI application
-│   ├── main.py                   # API initialization
-│   ├── routes/                   # Endpoints
-│   └── models/                   # Pydantic schemas
-│
-├── scripts/                      # Offline pipeline
-│   ├── 01_load_data.py
-│   ├── 02_create_embeddings.py
-│   ├── 03_build_index.py
-│   └── 04_evaluate.py
-│
-├── evaluation/                   # Evaluation framework
-│   ├── test_questions.json
-│   └── metrics.py
-│
-├── notebooks/                    # Experimental (optional)
-│   └── rag-legal-notebook.ipynb
-│
-├── requirements.txt
-├── Dockerfile
-└── README.md
-```
+Large artifacts required to fully reproduce this project are hosted on the Hugging Face Hub and intentionally excluded from this GitHub repository.
+
+**Hugging Face Dataset Repository:**
+👉 https://huggingface.co/datasets/ankpatil1203/legal-rag-eurlex-artifacts
+
+### Contents
+
+| Folder | Description |
+|------|------------|
+| `raw/` | Raw EUR-Lex documents (JSON) |
+| `processed/` | Cleaned + chunked text passages |
+| `embeddings/` | Precomputed sentence embeddings (19K × 384) |
+| `faiss/` | FAISS IndexFlatIP index files |
+
+**Total Size:** ~6.2 GB  
+**Versioning:** All artifacts are versioned and pinned by commit hash for full reproducibility.
+
+> These artifacts are required to run the FastAPI service and reproduce evaluation results.
+
 
 **Note:** Large artifacts (datasets, embeddings, FAISS indexes, results) are hosted externally on Hugging Face Hub and downloaded via `scripts/download_artifacts.py`. They are NOT stored in this Git repository.
 
