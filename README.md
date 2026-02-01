@@ -63,13 +63,13 @@ EUR-Lex Data → Cleaning → Chunking → Embeddings → FAISS Index → FastAP
 | Feature | Implementation | Details |
 |---------|---------------|---------|
 | **Semantic Search** | Sentence-Transformers | `all-MiniLM-L6-v2` embeddings (384-dim) |
-| **Fast Retrieval** | FAISS IndexFlatIP | Sub-50ms search over 19K+ chunks |
+| **Fast Retrieval** | FAISS IndexFlatIP | ~Sub-50ms search over 19K+ chunks (hardware-dependent)|
 | **Answer Generation** | BART | `facebook/bart-base` for generation |
 | **Chunking Strategy** | Overlapping chunks | 500 chars, 100 char overlap |
 | **Retrieval Metrics** | Comprehensive evaluation | Recall@K, Precision@K, MRR |
 | **Failure Analysis** | Systematic debugging | Missing & irrelevant result detection |
 | **API Service** | FastAPI | Stateless, scalable REST API |
-| **Observability** | Structured logging | JSON logs, latency profiling |
+| **Observability** | Structured logging | JSON logs, latency metrics, request tracing |
 
 **Dataset Statistics:**
 - Total Documents: 57,000+ EU legal texts
@@ -82,6 +82,8 @@ EUR-Lex Data → Cleaning → Chunking → Embeddings → FAISS Index → FastAP
 - Precomputed embeddings (19K × 384 vectors, ~30MB)
 - FAISS index (~30MB)
 - Evaluation results
+  
+NOTE: These artifacts are intentionally excluded from GitHub and required for full reproducibility.
 
 ---
 
@@ -98,7 +100,7 @@ graph TB
     G[User Question] -->|FastAPI| H[Query Embedding]
     H -->|Search| F
     F -->|Top-K| I[Retrieved Context]
-    I -->|BART| J[Answer]
+    I -->|Optional BART generation| J[Answer]
     
     style F fill:#e1f5ff
     style I fill:#fff4e1
@@ -112,14 +114,12 @@ graph TB
 
 **1. Data Ingestion**
 - Load HuggingFace `lex_glue/eurlex` dataset
-- Extract legal text from all splits (train/validation/test)
 - Output: 57,000+ documents
 
 **2. Text Cleaning**
 - Normalize whitespace
 - Remove artifacts (long dash/underscore sequences)
 - Preserve legal structure and formatting
-- No aggressive preprocessing to maintain legal language integrity
 
 **3. Chunking**
 ```python
@@ -136,12 +136,13 @@ def chunk_text(text, chunk_size=500, overlap=100):
 
 **4. Embedding Generation**
 - Model: `sentence-transformers/all-MiniLM-L6-v2`
-- Batch encoding with GPU acceleration
+- Batch encoding (CPU/GPU supported)
 - L2 normalization for cosine similarity
 - Output: (19412, 384) normalized vectors
 
 **5. FAISS Indexing**
 - Index type: `IndexFlatIP` (Inner Product for cosine similarity)
+- Index is loaded into memory at API startup for fast query-time retrieval.
 - Add all embeddings to index
 - Save to disk for fast loading
 
@@ -156,14 +157,9 @@ def chunk_text(text, chunk_size=500, overlap=100):
 - API key authentication
 - Structured JSON logging
 - Latency profiling middleware
+- Config-driven startup (paths, model, index)
 
-**Retrieval Flow:**
-```python
-def retrieve(question, k=5):
-    query_emb = model.encode(question, normalize_embeddings=True)
-    scores, indices = index.search(query_emb.reshape(1, -1), k)
-    return [metadata[idx] for idx in indices[0]]
-```
+
 
 **Answer Generation:**
 - Model: `facebook/bart-base`
@@ -175,7 +171,7 @@ def retrieve(question, k=5):
 - Query encoding: ~12ms
 - FAISS search: ~35ms (K=10)
 - BART generation: ~250ms
-- Total E2E: <300ms
+- Total E2E: ~300ms (hardware- and load-dependent)
 
 </details>
 
@@ -186,7 +182,7 @@ def retrieve(question, k=5):
 ### Prerequisites
 
 ```bash
-Python 3.9+
+Python 3.12 (recommended)
 CUDA GPU (optional, recommended)
 8GB+ RAM
 ```
@@ -199,14 +195,16 @@ git clone https://github.com/Ankush-Patil99/legal-RAG-eurlex.git
 cd legal-RAG-eurlex
 
 # Install dependencies
-pip install -r requirements.txt
+- python -m venv venv
+  source venv/bin/activate  # Windows: venv\Scripts\activate
+- pip install -r requirements.txt
 
 # Download artifacts from Hugging Face Hub
-python scripts/download_artifacts.py
+python scripts/download_artifacts.py  # downloads data, embeddings, FAISS index from HF Hub
 ```
 
 ### Run FastAPI Server
-
+Note: This starts the development server. For production, use a process manager (e.g., gunicorn).
 ```bash
 uvicorn api.main:app --host 0.0.0.0 --port 8000
 ```
@@ -221,6 +219,8 @@ docker run -p 8000:8000 --env-file .env legal-rag-eurlex
 ### Test Retrieval
 
 ```bash
+Example request to test semantic retrieval via the FastAPI endpoint:
+
 curl -X POST "http://localhost:8000/search" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
