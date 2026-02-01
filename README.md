@@ -262,22 +262,26 @@ legal-RAG-eurlex/
 
 ## 📊 Evaluation Results
 
-### Retrieval Performance
+### Retrieval Performance (Current Run)
 
-| Metric | K=5 | K=10 | Target | Status |
-|--------|-----|------|--------|--------|
-| **Recall@K** | 82.0% | 91.0% | >85% | ✅ |
-| **Precision@K** | 76.0% | 68.0% | >70% | ✅ |
-| **MRR** | 0.79 | - | >0.75 | ✅ |
+- Number of evaluation questions: 3
+- Recall@5: 0.33
+- Precision@5: 0.27
+- MRR: 0.33
 
-### Latency Benchmarks
+Note: Metrics are reported on a very small evaluation set and are intended
+to validate pipeline correctness rather than benchmark final retrieval quality.
 
-| Operation | Time (ms) | Notes |
-|-----------|-----------|-------|
-| Query Encoding | 12ms | GPU: 8ms, CPU: 15ms |
-| FAISS Search | 35ms | 19K vectors, K=10 |
-| BART Generation | 250ms | Max 128 tokens |
-| **Total E2E** | ~300ms | End-to-end pipeline |
+### Latency Benchmarks (End-to-End API)
+
+- Embedding time: ~250 ms
+- Retrieval time: ~694 ms
+- Generation time: ~7604 ms
+- Total end-to-end latency: ~8.5 seconds
+
+Note: Latency measured on a single-request, end-to-end API run.
+Performance is hardware- and configuration-dependent.
+|
 
 ### Metric Definitions
 
@@ -299,34 +303,31 @@ mrr = 1 / rank_of_first_relevant_doc
 <details>
 <summary><b>Failure Analysis</b></summary>
 
-**Common Failure Patterns:**
-1. Missing domain-specific terms (e.g., "right to erasure" vs "right to be forgotten")
-2. Multi-hop reasoning required (combining multiple document sections)
-3. Overly broad queries (generic questions need reformulation)
+- Total failures detected: 2
+- Failure type: Retrieval miss
 
-**Statistics:**
-- Total failures: 12/100 test queries (12%)
-- Missing relevant: 7 cases
-- Irrelevant results: 5 cases
+Observed patterns:
+- Relevant legal articles present but not ranked in top-K
+- Terminology mismatch (e.g., older treaty article references)
 
-Full analysis saved to `results/failure_analysis.json` (external artifact).
 
 </details>
 
 <details>
 <summary><b>Prompt Engineering Results</b></summary>
 
-Two prompts compared via A/B testing:
-- **Prompt V1:** Simple instruction
-- **Prompt V2:** Structured with explicit rules, citation requirements
+Two prompt variants were compared on a small qualitative sample (3 questions):
 
-**Findings:**
-- Prompt V2 provides more precise citations
-- Prompt V2 includes article references
-- Prompt V2 better handles "I don't know" cases
-- Recommended for production: **Prompt V2**
+- Prompt V1: Simple instruction
+- Prompt V2: Structured with explicit grounding rules
 
-Results saved to `results/prompt_comparison.json` (external artifact).
+Findings:
+- Prompt V2 produces more grounded answers
+- Better handling of “I don’t know” cases
+- More consistent citation-style responses
+
+Results saved in `results/prompt_comparison.json`.
+
 
 </details>
 
